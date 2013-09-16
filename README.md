@@ -2,12 +2,12 @@ Mail Listener Project
 ================================================================================
 
 Description:
-This project listen an email from mailbox and create a task on readmine pm tool
+This project listen an email from mailbox and create a task on readmine pm tool.</br>
 Project was developed as ESB project and you should deploy it with JbossESB
 
-Using:
-1. Setup your email in file spring-beans.xml
-2. Deploy project in AS as JbossESB
+Using:</br>
+1. Setup your email in file spring-beans.xml</br>
+2. Deploy project in AS as JbossESB</br>
 3. Send an email to this email. Service will create an issue/task on redmine PM tool which:
   - Issue created in project which configured in email.properties
   - Name is mail's subject.
