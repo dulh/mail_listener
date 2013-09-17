@@ -10,7 +10,7 @@ Project was developed as ESB project and you should deploy it with JbossESB <br>
 2. Deploy project in AS as JbossESB<br>
 3. Send an email to this email. Service will create an issue/task on redmine PM tool which:<br>
   - Issue created in project which configured in email.properties
-  - Name is mail's subject.
-  - Content is mail's content.
+  - Issue's name is mail's subject.
+  - Issie's description is mail's content.
   - You can add more attachments.
   - The first mail address in CC list will be chosen to assign this issue/task to.
