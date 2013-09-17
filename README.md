@@ -15,5 +15,5 @@ Project was developed as ESB project and you should deploy it with JbossESB <br>
   - You can add more attachments.
   - The first mail address in CC list will be chosen to assign this issue/task to.
 
-<b>Enhencement</b><br>
+<b>Bug & enhencement</b><br>
 Thre are still some bugs. I'll enhamce & fix soon.
