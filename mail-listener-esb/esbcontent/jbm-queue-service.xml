@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <!--Mail listener -->
+   <mbean code="org.jboss.jms.server.destination.QueueService"
+           name="jboss.esb.destination:service=Queue,name=pm_mail_receiver"
+           xmbean-dd="xmdesc/Queue-xmbean.xml">
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+    </mbean>
+    
+    <mbean code="org.jboss.jms.server.destination.QueueService"
+           name="jboss.esb.destination:service=Queue,name=pm_mail_receiver_reply"
+           xmbean-dd="xmdesc/Queue-xmbean.xml">
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+    </mbean>
+</server>

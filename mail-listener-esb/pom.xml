@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.vng</groupId>
+		<artifactId>is-integration</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<groupId>com.vng</groupId>
+	<artifactId>mail-listener-esb</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>mail-listener-esb</name>
+	<packaging>jboss-esb</packaging>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jbossesb.home>d:/Software/jbossesb-server-4.10</jbossesb.home>
+		<jbossesb.version>4.10</jbossesb.version>
+		<jbossesb.lib>${jbossesb.home}/server/default/deploy/jbossesb.sar/lib</jbossesb.lib>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jbossesb-spring</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/../esb-libs/jbossesb-spring.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>xmlbeans</groupId>
+			<artifactId>xbean</artifactId>
+			<version>2.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/ojdbc6.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.vedantatree</groupId>
+			<artifactId>redmineconnector</artifactId>
+			<version>2.0.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/vts-redmineconnector.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.vng</groupId>
+			<artifactId>esb-db-layer</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+ 		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-core</artifactId>
+			<version>2.1.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-mail</artifactId>
+			<version>2.1.3.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.48</version>
+		</dependency>
+        <dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jbossesb-spring</artifactId>
+			<version>${jbossesb.version}</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/../esb-libs/jbossesb-spring.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jbossesb-rosetta</artifactId>
+			<version>${jbossesb.version}</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/../esb-libs/jbossesb-rosetta.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jbossesb-config-model</artifactId>
+			<version>${jbossesb.version}</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/../esb-libs/jbossesb-config-model-1.0.1.jar</systemPath>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.googlecode.addjars-maven-plugin</groupId>
+						<artifactId>addjars-maven-plugin</artifactId>
+						<version>1.0.3</version>
+						<executions>
+							<execution>
+								<phase>default</phase>
+								<goals>
+									<goal>add-jars</goal>
+								</goals>
+								<configuration>
+									<resources>
+										<resource>
+											<directory>${basedir}/lib</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>jboss-packaging-maven-plugin</artifactId>
+						<version>2.2</version>
+						<!-- Enable packaging types and lifecycle bindings. -->
+						<extensions>true</extensions>
+						<configuration>
+							<excludes>
+								<exclude>groupId:artifactId</exclude> <!-- if you want to exclude an artifact from the sar -->
+							</excludes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<echo>Run task for DEVELOPMENT mode</echo>
+										<delete file="${project.build.outputDirectory}/config.properties" />
+										<delete
+											file="${project.build.outputDirectory}/config.prod.properties" />
+										<delete
+											file="${project.build.outputDirectory}/config.dev.properties" />
+										<echo>Copy file ${basedir}/esbcontent/config.dev.properties</echo>
+										<copy file="${basedir}/esbcontent/config.dev.properties"
+											tofile="${project.build.outputDirectory}/config.properties" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>${basedir}/esbcontent</directory>
+						<filtering>true</filtering>
+					</resource>
+					<!-- can be added any content which will be copied into .esb file archieve -->
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.googlecode.addjars-maven-plugin</groupId>
+						<artifactId>addjars-maven-plugin</artifactId>
+						<version>1.0.3</version>
+						<executions>
+							<execution>
+								<phase>default</phase>
+								<goals>
+									<goal>add-jars</goal>
+								</goals>
+								<configuration>
+									<resources>
+										<resource>
+											<directory>${basedir}/lib</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>jboss-packaging-maven-plugin</artifactId>
+						<version>2.2</version>
+						<!-- Enable packaging types and lifecycle bindings. -->
+						<extensions>true</extensions>
+						<configuration>
+							<excludes>
+								<exclude>groupId:artifactId</exclude> <!-- if you want to exclude an artifact from the sar -->
+							</excludes>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<echo>Run task for PRODUCTION mode</echo>
+										<echo>Output dir: ${project.build.outputDirectory}</echo>
+										<delete file="${project.build.outputDirectory}/config.properties" />
+										<delete
+											file="${project.build.outputDirectory}/config.dev.properties" />
+										<delete
+											file="${project.build.outputDirectory}/config.prod.properties" />
+										<echo>Copy file ${basedir}/esbcontent/config.prod.properties</echo>
+										<copy file="${basedir}/esbcontent/config.prod.properties"
+											tofile="${project.build.outputDirectory}/config.properties" />
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>${basedir}/esbcontent</directory>
+						<filtering>true</filtering>
+					</resource>
+					<!-- can be added any content which will be copied into .esb file archieve -->
+				</resources>
+			</build>
+		</profile>
+	</profiles>
+
+	<!-- Must build by profiles to get correct archive file. Below config to correct setting with jboss-esb packaging -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jboss-packaging-maven-plugin</artifactId>
+				<version>2.2</version>
+				<!-- Enable packaging types and lifecycle bindings. -->
+				<extensions>true</extensions>
+				<configuration>
+					<excludes>
+						<exclude>groupId:artifactId</exclude> <!-- if you want to exclude an artifact from the sar -->
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

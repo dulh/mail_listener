@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<jbossesb parameterReloadSecs="5"
+ xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.3.0.xsd"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.3.0.xsd http://anonsvn.jboss.org/repos/labs/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.3.0.xsd">
+ 
+ <globals>
+  <war-security domain="JBossWS" method="BASIC"/>
+ </globals>
+ <providers>
+  <jms-jca-provider connection-factory="ConnectionFactory" name="JBossMQ">
+   <jms-bus busid="createPMTaskEsbChannel">
+    <jms-message-filter dest-name="queue/pm_mail_receiver" dest-type="QUEUE"/>
+   </jms-bus>
+   
+   <activation-config>
+    <property name="dLQMaxResent" value="1"/>
+   </activation-config>
+  </jms-jca-provider>
+  
+  <http-provider name="http">
+   <http-bus busid="isHttpChannel">
+     <allowed-roles>
+       <role name="misesb_user" />
+     </allowed-roles>
+     <protected-methods>
+       <method name="GET" />
+       <method name="POST" />
+     </protected-methods>
+   </http-bus>
+  </http-provider>
+  
+ </providers>
+	 <services>
+	  	<service category="is" description="Create issue on PM" name="createPMIssue">
+	   		<listeners>
+	   	 		<http-gateway busidref="isHttpChannel" name="PMHttpListener" payloadAs="STRING" urlPattern="pm/createPMTask/*"/>
+	     		<jms-listener busidref="createPMTaskEsbChannel" is-gateway="false" name="createPMTaskJMSListener"/>
+	  		</listeners>
+	   		<actions mep="RequestResponse">
+	    		<action class="com.vng.esb.action.MailListenerAction" name="readMailAction" process="process"/>
+	   		</actions>
+	  	</service>
+	</services>
+</jbossesb>
+
